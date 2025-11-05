@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TP4.univ.paris13.mybatis.AdresseMapper">
+
+    <!-- Adresses avec habitants -->
+    <select id="findWithPersonnes" resultType="Adresse">
+        SELECT DISTINCT a.*
+        FROM adresse a
+                 INNER JOIN personne p ON a.id = p.id_adresse
+        WHERE p.id IS NOT NULL
+    </select>
+
+</mapper>

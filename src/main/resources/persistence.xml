@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+    <!-- 🔹 Unité de persistance = configuration complète -->
+    <persistence-unit name="TP4-PU" transaction-type="RESOURCE_LOCAL">
+
+        <!-- 🔹 Fournisseur JPA = Hibernate -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!-- 🔹 Liste des classes entités -->
+        <class>TP4.univ.paris13.hebernate.model.Personne</class>
+        <class>TP4.univ.paris13.hebernate.model.Adresse</class>
+
+        <!-- 🔹 Propriétés de configuration -->
+        <properties>
+            <!-- Paramètres de connexion à la base -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/paris13"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="votre_mot_de_passe"/>
+
+            <!-- 🔹 Configuration Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+
+            <!-- 🔹 Pool de connexions -->
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+
+            <!-- 🔹 Affichage SQL -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

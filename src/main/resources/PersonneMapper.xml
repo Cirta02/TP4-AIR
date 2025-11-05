@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="TP4.univ.paris13.mybatis.PersonneMapper">
+
+    <!-- ResultMap pour Personne avec Adresse -->
+    <resultMap id="PersonneWithAdresseMap" type="Personne">
+        <id property="id" column="p_id"/>
+        <result property="nom" column="p_nom"/>
+        <result property="prenom" column="p_prenom"/>
+        <result property="tel" column="p_tel"/>
+        <result property="mail" column="p_mail"/>
+        <result property="idAdresse" column="p_id_adresse"/>
+        <result property="idAdresseTravail" column="p_id_adresse_travail"/>
+
+        <association property="adresse" javaType="Adresse">
+            <id property="id" column="a_id"/>
+            <result property="numero" column="a_numero"/>
+            <result property="rue" column="a_rue"/>
+            <result property="codePostal" column="a_code_postal"/>
+            <result property="ville" column="a_ville"/>
+            <result property="pays" column="a_pays"/>
+        </association>
+    </resultMap>
+
+    <!-- Personnes par ville avec jointure -->
+    <select id="findPersonnesByVille" parameterType="string" resultMap="PersonneWithAdresseMap">
+        SELECT
+            p.id as p_id, p.nom as p_nom, p.prenom as p_prenom,
+            p.tel as p_tel, p.mail as p_mail,
+            p.id_adresse as p_id_adresse, p.id_adresse_travail as p_id_adresse_travail,
+            a.id as a_id, a.numero as a_numero, a.rue as a_rue,
+            a.code_postal as a_code_postal, a.ville as a_ville, a.pays as a_pays
+        FROM personne p
+                 INNER JOIN adresse a ON p.id_adresse = a.id
+        WHERE a.ville = #{ville}
+    </select>
+
+    <!-- Personne avec adresse complète -->
+    <select id="findWithAdresse" parameterType="int" resultMap="PersonneWithAdresseMap">
+        SELECT
+            p.id as p_id, p.nom as p_nom, p.prenom as p_prenom,
+            p.tel as p_tel, p.mail as p_mail,
+            p.id_adresse as p_id_adresse, p.id_adresse_travail as p_id_adresse_travail,
+            a.id as a_id, a.numero as a_numero, a.rue as a_rue,
+            a.code_postal as a_code_postal, a.ville as a_ville, a.pays as a_pays
+        FROM personne p
+                 LEFT JOIN adresse a ON p.id_adresse = a.id
+        WHERE p.id = #{id}
+    </select>
+
+    <!-- Personnes avec adresses visitées -->
+    <select id="findWithAdressesVisitees" resultType="Personne">
+        SELECT DISTINCT p.*
+        FROM personne p
+                 INNER JOIN personne_adresse_visite pav ON p.id = pav.personne_id
+    </select>
+
+</mapper>
